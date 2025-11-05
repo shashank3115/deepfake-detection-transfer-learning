@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+
+# Data and large files
+data/
+outputs/model.pth
+outputs/checkpoints/
+
+# System and cache
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+
+# Submissions and zips
+submissions/
+*.zip
