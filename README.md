@@ -1,94 +1,96 @@
-## 🧠 **README.md**
 
-```markdown
-# 🧩 Deepfake Detection Using Transfer Learning
+# 🧠 Deepfake Detection using Transfer Learning (ResNet18, PyTorch)
 
-> A deep learning pipeline to detect AI-generated (deepfake) images using transfer learning on ResNet18.  
-> Built for **Synergy’25 – Deepfake ML Model Hackathon**.
+[![PyTorch](https://img.shields.io/badge/Framework-PyTorch-orange)](https://pytorch.org/)
+[![Hackathon](https://img.shields.io/badge/Event-Synergy’25%20Hackathon-blue)]()
+[![Accuracy](https://img.shields.io/badge/Accuracy-90%25-success)]()
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
+[![Status](https://img.shields.io/badge/Status-Completed-brightgreen)]()
 
----
-
-## 🚀 Project Overview
-
-Deepfakes pose a serious challenge to digital authenticity.  
-This project develops a **deepfake detection model** that predicts whether an image is *real* or *fake*, simulating the output distribution of a proprietary deepfake detector.
-
-The model learns from a dataset of labeled real and fake images and outputs prediction scores for unseen test images.  
-It uses **transfer learning (ResNet18)** to achieve high accuracy with limited training data.
+> 🚀 **AI-driven Deepfake Detection Pipeline** using Transfer Learning on **ResNet18**, designed to predict proprietary deepfake detector outputs.  
+> Developed for **Synergy’25 – Deepfake ML Model Hackathon**.
 
 ---
 
-## 🧾 Problem Statement
+## 🔍 Overview
 
-> Build a predictive model that maps image features to deepfake detection scores.  
-> Use the provided training images and proprietary model outputs (in JSON) to generalize on unseen test data.
+Deepfakes are rapidly evolving threats to digital authenticity.  
+This project builds a **Deepfake Detection Model** that predicts whether an image is *real* or *AI-generated (fake)*, replicating the output distribution of a proprietary model.  
 
-The output should be a JSON file (`teamname_prediction.json`) with predicted detection scores for all test images.
+Leveraging **Transfer Learning** on **ResNet18**, the model achieves **~90% validation accuracy** while remaining lightweight and scalable.
 
 ---
 
-## 📂 Dataset Description
+## 🎯 Problem Statement
 
-**Folders:**
+> **Goal:** Develop a predictive model that maps image features to deepfake detection scores.  
+> Use provided training images and proprietary model outputs (JSON format) to generalize effectively to unseen test data.  
+>  
+> **Expected Output:** A JSON file (`teamname_prediction.json`) containing detection probabilities for all test images.
+
+---
+
+## 🗂️ Dataset Description
+
+### Folder Structure
+
 ```
-
 data/
 ├── real_cifake_images/        # Real training images
 ├── fake_cifake_images/        # Fake training images
 ├── test_images/               # Unlabeled test images
-├── real_cifake_preds.json     # Proprietary model outputs for real images
-├── fake_cifake_preds.json     # Proprietary model outputs for fake images
-└── train_meta.json            # Combined training metadata (created by merge_jsons.py)
+├── real_cifake_preds.json     # Proprietary outputs (real images)
+├── fake_cifake_preds.json     # Proprietary outputs (fake images)
+└── train_meta.json            # Combined metadata file
+```
+### JSON Format Example
 
-````
-
-**train_meta.json Format:**
 ```json
 {
   "index": 1,
   "label": 1,
   "prediction": "real"
 }
-````
+```
 
 * `label`: 1 → Real, 0 → Fake
-* `index`: Corresponds to image filename (e.g., `1.png`, `2.png`, …)
+* `index`: Corresponds to the image filename (`1.png`, `2.png`, …)
 
 ---
 
 ## ⚙️ Methodology
 
-### 1. **Data Preprocessing**
+### 1️⃣ Data Preprocessing
 
-* Resized all images to `224×224` pixels.
-* Normalized using ImageNet mean and standard deviation.
-* Custom PyTorch `Dataset` dynamically loads labeled images.
-* Missing indices are auto-handled gracefully.
+* Resized all images to `224×224` pixels
+* Normalized using ImageNet mean & std deviation
+* Implemented a custom **PyTorch Dataset** class
+* Automatically handles missing image indices gracefully
 
-### 2. **Model Architecture**
+### 2️⃣ Model Architecture
 
-* **Base Model:** `ResNet18` pretrained on ImageNet.
+* **Base Model:** ResNet18 pretrained on ImageNet
 * **Modified Layers:**
 
   ```
   Linear(512 → 128) → ReLU → Dropout(0.3) → Linear(128 → 1) → Sigmoid
   ```
-* **Loss:** Binary Cross Entropy (BCE)
-* **Optimizer:** Adam (learning rate = 1e-4)
+* **Loss Function:** Binary Cross Entropy (BCE)
+* **Optimizer:** Adam (`lr = 1e-4`)
 * **Batch Size:** 16
 * **Epochs:** 5
 
-### 3. **Training**
+### 3️⃣ Training
 
-* Trained on 2000 images (1000 real + 1000 fake).
-* Validation split: 10%.
-* Achieved **~90% validation accuracy** within 5 epochs.
+* Dataset: 2000 images (1000 real + 1000 fake)
+* Validation Split: 10%
+* Achieved **~90% validation accuracy** by Epoch 3
 
-### 4. **Inference**
+### 4️⃣ Inference
 
-* Loads saved model (`outputs/model.pth`)
-* Predicts probability scores (0–1) for all test images.
-* Outputs results in JSON format identical to the proprietary model.
+* Loads the saved model (`outputs/model.pth`)
+* Generates probability scores (0–1) for all test images
+* Produces a structured JSON output identical to proprietary format
 
 ---
 
@@ -101,10 +103,10 @@ data/
 | Validation Loss     | 0.23  |
 | Best Epoch          | 3     |
 
-**Observation:**
+**Observations:**
 
-* Model effectively distinguishes real vs fake faces.
-* Slight overfitting observed after Epoch 4 (expected due to small dataset).
+* Model effectively distinguishes real vs fake faces
+* Slight overfitting after Epoch 4 (expected due to small dataset)
 
 **Performance Graphs:**
 
@@ -115,7 +117,7 @@ data/
 
 ## 🧮 Output Example
 
-**File:** `outputs/teamname_prediction.json`
+**File:** `outputs/shashank_prediction.json`
 
 ```json
 [
@@ -129,11 +131,11 @@ data/
 
 ## 💡 Key Features
 
-* Transfer learning with pretrained CNNs
-* Automatic dataset merging and JSON handling
-* Robust dataloader with missing file tolerance
-* CPU and GPU compatible
-* Visualization of training performance
+✅ Transfer learning with pretrained CNNs
+✅ Automatic dataset merging and JSON handling
+✅ Robust dataloader with missing file tolerance
+✅ Compatible with both CPU and GPU
+✅ Visualization of loss and accuracy metrics
 
 ---
 
@@ -153,20 +155,21 @@ data/
 
 ## 📦 Project Structure
 
-```
+```bash
 deepfake-hackathon/
 ├── data/                        # Dataset folders & JSONs
 ├── scripts/
-│   ├── dataset.py               # Custom PyTorch Dataset class
+│   ├── dataset.py               # Custom Dataset class
 │   ├── merge_jsons.py           # Combines real & fake JSONs
-│   ├── train.py                 # Model training script
-│   ├── infer.py                 # Inference script (prediction generation)
+│   ├── train.py                 # Training script
+│   ├── infer.py                 # Inference script
+│   ├── make_submission.py       # Automates ZIP creation
 │   └── plot_training_graphs.py  # Generates accuracy/loss plots
 ├── outputs/
 │   ├── model.pth                # Saved trained model
 │   ├── loss_curve.png
 │   ├── accuracy_curve.png
-│   └── teamname_prediction.json # Final submission file
+│   └── shashank_prediction.json # Final JSON output
 ├── requirements.txt
 └── README.md
 ```
@@ -214,31 +217,38 @@ python scripts/plot_training_graphs.py
 
 ---
 
-## 🧠 Future Improvements
+## 🔮 Future Improvements
 
-* Use deeper networks (ResNet50 / EfficientNet / Vision Transformer).
-* Integrate facial landmarks or embeddings for higher accuracy.
-* Expand dataset with multi-ethnic and multi-lighting images.
-* Deploy real-time deepfake detection web app (Flask/Streamlit).
+🚀 Upgrade to ResNet50 / EfficientNet / Vision Transformer
+🧠 Integrate facial embeddings or landmarks for improved accuracy
+🧩 Expand dataset with diverse lighting and ethnic variations
+🌐 Deploy real-time deepfake detection web app (Flask/Streamlit)
 
 ---
 
 ## 🏁 Conclusion
 
-This project demonstrates how **transfer learning** can effectively detect deepfakes using limited data.
-The resulting model achieves **90% accuracy**, with stable performance and a scalable, reproducible pipeline.
+This project demonstrates how **Transfer Learning** can effectively detect deepfakes using limited data.
+The resulting model achieves **90% accuracy**, with robust generalization and reproducible results.
 
-It’s a strong foundation for future research and real-world applications in **AI-based content verification**.
+It serves as a strong foundation for future research in **AI-based content verification and digital forensics**.
 
 ---
 
 ## 👤 Author
 
 **Shashank Padmasale**
-💻 B.Tech – Computer Science
-📧 shashankpadmasale@gmail.com
+💻 B.Tech – Computer Science & Engineering
+📧 [shashankpadmasale@gmail.com](mailto:shashankpadmasale@gmail.com)
+🌐 [GitHub: shashank3115](https://github.com/shashank3115)
 
 ---
 
+## 🏆 Acknowledgements
+
+Special thanks to **Synergy’25 Hackathon Organizers** for providing the dataset and framework.
+Built with 💻, ☕, and a passion for exploring **AI innovation**.
+
+---
 
 
